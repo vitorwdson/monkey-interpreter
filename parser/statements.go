@@ -8,16 +8,13 @@ import (
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.currToken.Type {
 	case token.LET:
-		let := p.parseLetStatement()
-		if let != nil { // NOTE: this check is needed because let may be nil, but still have a type (see nil check for interfaces)
-			return let // TODO: Find a better way of doing this maybe?
-		}
+		return p.parseLetStatement()
 	}
 
 	return nil
 }
 
-func (p *Parser) parseLetStatement() *ast.LetStatement {
+func (p *Parser) parseLetStatement() ast.Statement {
 	statement := &ast.LetStatement{Token: p.currToken}
 
 	if !p.expectPeek(token.IDENTIFIER) {
