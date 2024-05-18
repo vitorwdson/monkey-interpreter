@@ -1,6 +1,6 @@
 package token
 
-type TokenType int
+type TokenType string
 
 type Token struct {
 	Type    TokenType
@@ -11,45 +11,45 @@ type Token struct {
 
 const (
 	// Special tokens
-	ILLEGAL TokenType = iota
-	EOF
+	ILLEGAL TokenType = "ILLEGAL"
+	EOF     TokenType = "EOF"
 
 	// Identifiers + Literals
-	IDENTIFIER
-	INT
+	IDENTIFIER TokenType = "IDENTIFIER"
+	INT        TokenType = "INT"
 
 	// Operators
-	ASSIGN
-	PLUS
-	MINUS
-	BANG
-	ASTERISK
-	SLASH
+	ASSIGN   TokenType = "ASSIGN"
+	PLUS     TokenType = "PLUS"
+	MINUS    TokenType = "MINUS"
+	BANG     TokenType = "BANG"
+	ASTERISK TokenType = "ASTERISK"
+	SLASH    TokenType = "SLASH"
 
 	// Comparison
-	EQ
-	NEQ
-	GT
-	GTE
-	LT
-	LTE
+	EQ  TokenType = "EQ"
+	NEQ TokenType = "NEQ"
+	GT  TokenType = "GT"
+	GTE TokenType = "GTE"
+	LT  TokenType = "LT"
+	LTE TokenType = "LTE"
 
 	// Delimiters
-	COMMA
-	SEMICOLON
-	LPAREN
-	RPAREN
-	LBRACE
+	COMMA     TokenType = "COMMA"
+	SEMICOLON TokenType = "SEMICOLON"
+	LPAREN    TokenType = "LPAREN"
+	RPAREN    TokenType = "RPAREN"
+	LBRACE    TokenType = "LBRACE"
 	RBRACE
 
 	// Keywords
-	FUNCTION
-	LET
-	TRUE
-	FALSE
-	IF
-	ELSE
-	RETURN
+	FUNCTION TokenType = "FUNCTION"
+	LET      TokenType = "LET"
+	TRUE     TokenType = "TRUE"
+	FALSE    TokenType = "FALSE"
+	IF       TokenType = "IF"
+	ELSE     TokenType = "ELSE"
+	RETURN   TokenType = "RETURN"
 )
 
 func New(tokenType TokenType, literal string) Token {

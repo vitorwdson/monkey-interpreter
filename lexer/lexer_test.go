@@ -124,7 +124,7 @@ if (5 < 10) {
 
 		if expected.Type != result.Type {
 			t.Fatalf(
-				"tests[%d] - incorrect token type: expected %d, got %d",
+				"tests[%d] - incorrect token type: expected %q, got %q",
 				i,
 				expected.Type,
 				result.Type,
