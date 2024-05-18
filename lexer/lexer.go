@@ -28,6 +28,14 @@ func (l *Lexer) readChar() {
 	l.readPosition++
 }
 
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
+}
+
 func (l *Lexer) readNumber() string {
 	startPosition := l.position
 
@@ -60,10 +68,6 @@ func (l *Lexer) NextToken() token.Token {
 	l.skipWhitespace()
 
 	switch l.ch {
-	case '=':
-		tok = token.New(token.ASSIGN, "=")
-	case '+':
-		tok = token.New(token.PLUS, "+")
 	case '(':
 		tok = token.New(token.LPAREN, "(")
 	case ')':
@@ -76,20 +80,28 @@ func (l *Lexer) NextToken() token.Token {
 		tok = token.New(token.COMMA, ",")
 	case ';':
 		tok = token.New(token.SEMICOLON, ";")
+
+	case '+':
+		tok = token.New(token.PLUS, "+")
 	case '-':
 		tok = token.New(token.MINUS, "-")
-	case '!':
-		tok = token.New(token.BANG, "!")
 	case '*':
 		tok = token.New(token.ASTERISK, "*")
 	case '/':
 		tok = token.New(token.SLASH, "/")
+
+	case '=':
+		tok = l.getComposedToken(l.ch, '=', token.ASSIGN, token.EQ)
+	case '!':
+		tok = l.getComposedToken(l.ch, '=', token.BANG, token.NEQ)
 	case '>':
-		tok = token.New(token.GT, ">")
+		tok = l.getComposedToken(l.ch, '=', token.GT, token.GTE)
 	case '<':
-		tok = token.New(token.LT, "<")
+		tok = l.getComposedToken(l.ch, '=', token.LT, token.LTE)
+
 	case 0:
 		tok = token.New(token.EOF, "")
+
 	default:
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
@@ -106,6 +118,16 @@ func (l *Lexer) NextToken() token.Token {
 
 	l.readChar()
 	return tok
+}
+
+func (l *Lexer) getComposedToken(ch byte, next byte, normalType, composedType token.TokenType) token.Token {
+	if next != l.peekChar() {
+		return token.New(normalType, string(ch))
+	}
+
+	l.readChar()
+	literal := string(ch) + string(next)
+	return token.New(composedType, literal)
 }
 
 func isLetter(ch byte) bool {

@@ -27,8 +27,12 @@ const (
 	SLASH
 
 	// Comparison
+	EQ
+	NEQ
 	GT
+	GTE
 	LT
+	LTE
 
 	// Delimiters
 	COMMA

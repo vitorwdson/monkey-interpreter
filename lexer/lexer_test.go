@@ -22,7 +22,12 @@ if (5 < 10) {
     return true;
 } else {
     return false;
-}`
+}
+
+10 == 10;
+10 >= 5;
+5 <= 5;
+10 != 9;`
 
 	tests := []token.Token{
 		{Type: token.LET, Literal: "let"},
@@ -61,6 +66,7 @@ if (5 < 10) {
 		{Type: token.IDENTIFIER, Literal: "ten"},
 		{Type: token.RPAREN, Literal: ")"},
 		{Type: token.SEMICOLON, Literal: ";"},
+
 		{Type: token.BANG, Literal: "!"},
 		{Type: token.MINUS, Literal: "-"},
 		{Type: token.SLASH, Literal: "/"},
@@ -91,6 +97,24 @@ if (5 < 10) {
 		{Type: token.FALSE, Literal: "false"},
 		{Type: token.SEMICOLON, Literal: ";"},
 		{Type: token.RBRACE, Literal: "}"},
+
+		{Type: token.INT, Literal: "10"},
+		{Type: token.EQ, Literal: "=="},
+		{Type: token.INT, Literal: "10"},
+		{Type: token.SEMICOLON, Literal: ";"},
+		{Type: token.INT, Literal: "10"},
+		{Type: token.GTE, Literal: ">="},
+		{Type: token.INT, Literal: "5"},
+		{Type: token.SEMICOLON, Literal: ";"},
+		{Type: token.INT, Literal: "5"},
+		{Type: token.LTE, Literal: "<="},
+		{Type: token.INT, Literal: "5"},
+		{Type: token.SEMICOLON, Literal: ";"},
+		{Type: token.INT, Literal: "10"},
+		{Type: token.NEQ, Literal: "!="},
+		{Type: token.INT, Literal: "9"},
+		{Type: token.SEMICOLON, Literal: ";"},
+
 		{Type: token.EOF, Literal: ""},
 	}
 
