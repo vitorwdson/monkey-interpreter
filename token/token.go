@@ -41,6 +41,11 @@ const (
 	// Keywords
 	FUNCTION
 	LET
+	TRUE
+	FALSE
+	IF
+	ELSE
+	RETURN
 )
 
 func New(tokenType TokenType, literal string) Token {
