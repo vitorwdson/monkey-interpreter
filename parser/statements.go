@@ -20,20 +20,18 @@ func (p *Parser) parseStatement() ast.Statement {
 func (p *Parser) parseLetStatement() *ast.LetStatement {
 	statement := &ast.LetStatement{Token: p.currToken}
 
-	if p.peekToken.Type != token.IDENTIFIER {
+	if !p.expectPeek(token.IDENTIFIER) {
 		return nil
 	}
-	p.nextToken()
 
 	statement.Name = &ast.Identifier{
 		Token: p.currToken,
 		Value: p.currToken.Literal,
 	}
 
-	if p.peekToken.Type != token.ASSIGN {
+	if !p.expectPeek(token.ASSIGN) {
 		return nil
 	}
-	p.nextToken()
 
 	// TODO: get the expression assigned to the variable
 	for p.currToken.Type != token.SEMICOLON {
