@@ -1,6 +1,6 @@
 package token
 
-type TokenType string
+type TokenType int
 
 type Token struct {
 	Type    TokenType
@@ -11,28 +11,28 @@ type Token struct {
 
 const (
 	// Special tokens
-	ILLEGAL TokenType = "ILLEGAL"
-	EOF     TokenType = "EOF"
+	ILLEGAL TokenType = iota
+	EOF
 
 	// Identifiers + Literals
-	IDENTIFIER TokenType = "IDENTIFIER"
-	INT        TokenType = "INT"
+	IDENTIFIER
+	INT
 
 	// Operators
-	ASSIGN TokenType = "ASSIGN"
-	PLUS   TokenType = "PLUS"
+	ASSIGN
+	PLUS
 
 	// Delimiters
-	COMMA     TokenType = "COMMA"
-	SEMICOLON TokenType = "SEMICOLON"
-	LPAREN    TokenType = "LPAREN"
-	RPAREN    TokenType = "RPAREN"
-	LBRACE    TokenType = "LBRACE"
-	RBRACE    TokenType = "RBRACE"
+	COMMA
+	SEMICOLON
+	LPAREN
+	RPAREN
+	LBRACE
+	RBRACE
 
 	// Keywords
-	FUNCTION TokenType = "FUNCTION"
-	LET      TokenType = "LET"
+	FUNCTION
+	LET
 )
 
 func New(tokenType TokenType, literal string) Token {
