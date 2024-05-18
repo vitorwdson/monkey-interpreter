@@ -8,10 +8,13 @@ import (
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.currToken.Type {
 	case token.LET:
-		return p.parseLetStatement()
-	default:
-		return nil
+		let := p.parseLetStatement()
+		if let != nil { // NOTE: this check is needed because let may be nil, but still have a type (see nil check for interfaces)
+			return let // TODO: Find a better way of doing this maybe?
+		}
 	}
+
+	return nil
 }
 
 func (p *Parser) parseLetStatement() *ast.LetStatement {
