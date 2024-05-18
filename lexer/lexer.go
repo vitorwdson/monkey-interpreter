@@ -28,6 +28,16 @@ func (l *Lexer) readChar() {
 	l.readPosition++
 }
 
+func (l *Lexer) readIdentifier() string {
+	startPosition := l.position
+
+	for isLetter(l.ch) {
+		l.readChar()
+	}
+
+	return l.input[startPosition:l.position]
+}
+
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
@@ -50,8 +60,21 @@ func (l *Lexer) NextToken() token.Token {
 		tok = token.New(token.SEMICOLON, ";")
 	case 0:
 		tok = token.New(token.EOF, "")
+	default:
+		if isLetter(l.ch) {
+			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupIdentifier(tok.Literal)
+		} else {
+			tok = token.New(token.ILLEGAL, string(l.ch))
+		}
 	}
 
 	l.readChar()
 	return tok
+}
+
+func isLetter(ch byte) bool {
+	isLowercase := ch >= 'a' && ch <= 'z'
+	isUppercase := ch >= 'A' && ch <= 'Z'
+	return isLowercase || isUppercase || ch == '_'
 }
