@@ -14,7 +14,9 @@ let add = fn(x, y) {
   x + y;
 };
 
-let result = add(five, ten);`
+let result = add(five, ten);
+!-/*5;
+5 < 10 > 5;`
 
 	tests := []token.Token{
 		{Type: token.LET, Literal: "let"},
@@ -53,6 +55,18 @@ let result = add(five, ten);`
 		{Type: token.IDENTIFIER, Literal: "ten"},
 		{Type: token.RPAREN, Literal: ")"},
 		{Type: token.SEMICOLON, Literal: ";"},
+		{Type: token.BANG, Literal: "!"},
+		{Type: token.MINUS, Literal: "-"},
+		{Type: token.SLASH, Literal: "/"},
+		{Type: token.ASTERISK, Literal: "*"},
+		{Type: token.INT, Literal: "5"},
+		{Type: token.SEMICOLON, Literal: ";"},
+		{Type: token.INT, Literal: "5"},
+		{Type: token.LT, Literal: "<"},
+		{Type: token.INT, Literal: "10"},
+		{Type: token.GT, Literal: ">"},
+		{Type: token.INT, Literal: "5"},
+		{Type: token.SEMICOLON, Literal: ";"},
 		{Type: token.EOF, Literal: ""},
 	}
 
@@ -62,7 +76,7 @@ let result = add(five, ten);`
 
 		if expected.Type != result.Type {
 			t.Fatalf(
-				"tests[%d] - incorrect token type: expected %q, got %q",
+				"tests[%d] - incorrect token type: expected %d, got %d",
 				i,
 				expected.Type,
 				result.Type,

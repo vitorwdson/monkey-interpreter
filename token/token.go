@@ -21,6 +21,14 @@ const (
 	// Operators
 	ASSIGN
 	PLUS
+	MINUS
+	BANG
+	ASTERISK
+	SLASH
+
+	// Comparison
+	GT
+	LT
 
 	// Delimiters
 	COMMA
