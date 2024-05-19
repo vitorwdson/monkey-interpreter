@@ -52,3 +52,20 @@ func (es *ExpressionStatement) String() string {
 
 	return ""
 }
+
+type BlockStatement struct {
+	Token      token.Token
+	Statements []Statement
+}
+
+func (bs *BlockStatement) statementNode()       {}
+func (bs *BlockStatement) TokenLiteral() string { return bs.Token.Literal }
+func (bs *BlockStatement) String() string {
+	out := "{"
+
+	for _, s := range bs.Statements {
+		out += s.String()
+	}
+
+	return out + "}"
+}

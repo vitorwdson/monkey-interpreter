@@ -40,7 +40,7 @@ const (
 	LPAREN    TokenType = "LPAREN"
 	RPAREN    TokenType = "RPAREN"
 	LBRACE    TokenType = "LBRACE"
-	RBRACE
+	RBRACE    TokenType = "LBRACE"
 
 	// Keywords
 	FUNCTION TokenType = "FUNCTION"

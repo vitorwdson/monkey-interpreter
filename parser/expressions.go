@@ -58,6 +58,7 @@ func (p *Parser) setParseFunctions() {
 	p.prefixParseFns[token.BANG] = p.parsePrefixExpression
 	p.prefixParseFns[token.MINUS] = p.parsePrefixExpression
 	p.prefixParseFns[token.LPAREN] = p.parseGroupedExpression
+	p.prefixParseFns[token.IF] = p.parseIfExpression
 
 	p.infixParseFns[token.PLUS] = p.parseInfixExpression
 	p.infixParseFns[token.MINUS] = p.parseInfixExpression
@@ -166,4 +167,25 @@ func (p *Parser) parseGroupedExpression() ast.Expression {
 	}
 
 	return exp
+}
+
+func (p *Parser) parseIfExpression() ast.Expression {
+	ext := &ast.IfExpression{Token: p.currToken}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	ext.Condition = p.parseGroupedExpression()
+	if ext.Condition == nil {
+		return nil
+	}
+
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	ext.Consequence = p.parseBlockStatement()
+
+	return ext
 }

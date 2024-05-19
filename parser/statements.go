@@ -62,3 +62,21 @@ func (p *Parser) parseExpressionStatement() ast.Statement {
 
 	return statement
 }
+
+func (p *Parser) parseBlockStatement() *ast.BlockStatement {
+	block := &ast.BlockStatement{
+		Token:      p.currToken,
+		Statements: []ast.Statement{},
+	}
+
+	p.nextToken()
+	for !p.currTokenIs(token.RBRACE) && !p.currTokenIs(token.EOF) {
+		statement := p.parseStatement()
+		if statement != nil {
+			block.Statements = append(block.Statements, statement)
+		}
+		p.nextToken()
+	}
+
+	return block
+}
