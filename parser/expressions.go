@@ -24,11 +24,18 @@ const (
 func (p *Parser) setParseFunctions() {
 	p.prefixParseFns[token.IDENTIFIER] = p.parseIdentifier
 	p.prefixParseFns[token.INT] = p.parseIntegerLiteral
+	p.prefixParseFns[token.BANG] = p.parsePrefixExpression
+	p.prefixParseFns[token.MINUS] = p.parsePrefixExpression
 }
 
 func (p *Parser) parseExpression(precedence Precedence) ast.Expression {
 	prefix, ok := p.prefixParseFns[p.currToken.Type]
 	if !ok {
+		msg := fmt.Sprintf("no prefix parse function for %s found", p.currToken.Literal)
+		p.errors = append(p.errors, ParserError{
+			token:   p.peekToken,
+			message: msg,
+		})
 		return nil
 	}
 
@@ -61,4 +68,16 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 		Token: p.currToken,
 		Value: integer,
 	}
+}
+
+func (p *Parser) parsePrefixExpression() ast.Expression {
+	exp := &ast.PrefixExpression{
+		Token:    p.currToken,
+		Operator: p.currToken.Literal,
+	}
+
+	p.nextToken()
+	exp.Right = p.parseExpression(PREFIX)
+
+	return exp
 }

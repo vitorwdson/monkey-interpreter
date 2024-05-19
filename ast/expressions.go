@@ -1,6 +1,10 @@
 package ast
 
-import "github.com/vitorwdson/monkey-interpreter/token"
+import (
+	"fmt"
+
+	"github.com/vitorwdson/monkey-interpreter/token"
+)
 
 type Identifier struct {
 	Token token.Token
@@ -21,3 +25,15 @@ type IntegerLiteral struct {
 func (il *IntegerLiteral) expressionNode()      {}
 func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
 func (il *IntegerLiteral) String() string       { return il.Token.Literal }
+
+type PrefixExpression struct {
+	Token    token.Token
+	Operator string
+	Right    Expression
+}
+
+func (p *PrefixExpression) expressionNode()      {}
+func (p *PrefixExpression) TokenLiteral() string { return p.Token.Literal }
+func (p *PrefixExpression) String() string {
+	return fmt.Sprintf("(%s%s)", p.Operator, p.Right.String())
+}
