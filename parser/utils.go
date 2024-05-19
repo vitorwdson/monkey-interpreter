@@ -6,7 +6,7 @@ import (
 	"github.com/vitorwdson/monkey-interpreter/token"
 )
 
-func (p *Parser) curTokenIs(t token.TokenType) bool {
+func (p *Parser) currTokenIs(t token.TokenType) bool {
 	return p.currToken.Type == t
 }
 
