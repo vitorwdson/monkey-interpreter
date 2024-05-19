@@ -35,8 +35,8 @@ func (p *Parser) parseLetStatement() ast.Statement {
 	p.nextToken()
 	statement.Value = p.parseExpression(LOWEST)
 
-	if !p.expectPeek(token.SEMICOLON) {
-		return nil
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
 	}
 
 	return statement
@@ -48,8 +48,8 @@ func (p *Parser) parseReturnStatement() ast.Statement {
 
 	statement.Value = p.parseExpression(LOWEST)
 
-	if !p.expectPeek(token.SEMICOLON) {
-		return nil
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
 	}
 
 	return statement
