@@ -57,6 +57,7 @@ func (p *Parser) setParseFunctions() {
 	p.prefixParseFns[token.FALSE] = p.parseBooleanExpression
 	p.prefixParseFns[token.BANG] = p.parsePrefixExpression
 	p.prefixParseFns[token.MINUS] = p.parsePrefixExpression
+	p.prefixParseFns[token.LPAREN] = p.parseGroupedExpression
 
 	p.infixParseFns[token.PLUS] = p.parseInfixExpression
 	p.infixParseFns[token.MINUS] = p.parseInfixExpression
@@ -153,5 +154,16 @@ func (p *Parser) parseBooleanExpression() ast.Expression {
 		Token: p.currToken,
 		Value: p.currToken.Type == token.TRUE,
 	}
+	return exp
+}
+
+func (p *Parser) parseGroupedExpression() ast.Expression {
+	p.nextToken()
+
+	exp := p.parseExpression(LOWEST)
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
 	return exp
 }
