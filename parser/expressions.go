@@ -53,6 +53,8 @@ func (p *Parser) currPrecedence() Precedence {
 func (p *Parser) setParseFunctions() {
 	p.prefixParseFns[token.IDENTIFIER] = p.parseIdentifier
 	p.prefixParseFns[token.INT] = p.parseIntegerLiteral
+	p.prefixParseFns[token.TRUE] = p.parseBooleanExpression
+	p.prefixParseFns[token.FALSE] = p.parseBooleanExpression
 	p.prefixParseFns[token.BANG] = p.parsePrefixExpression
 	p.prefixParseFns[token.MINUS] = p.parsePrefixExpression
 
@@ -143,5 +145,13 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 	p.nextToken()
 	exp.Right = p.parseExpression(precedence)
 
+	return exp
+}
+
+func (p *Parser) parseBooleanExpression() ast.Expression {
+	exp := &ast.Boolean{
+		Token: p.currToken,
+		Value: p.currToken.Type == token.TRUE,
+	}
 	return exp
 }
