@@ -10,3 +10,13 @@ func (p *Program) TokenLiteral() string {
 	}
 	return ""
 }
+
+func (p *Program) String() string {
+	var out string
+
+	for _, s := range p.Statements {
+		out += s.String()
+	}
+
+	return out
+}
