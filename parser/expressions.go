@@ -32,6 +32,7 @@ var precedences = map[token.TokenType]Precedence{
 	token.MINUS:    SUM,
 	token.SLASH:    PRODUCT,
 	token.ASTERISK: PRODUCT,
+	token.LPAREN:   CALL,
 }
 
 func (p *Parser) peekPrecedence() Precedence {
@@ -71,6 +72,7 @@ func (p *Parser) setParseFunctions() {
 	p.infixParseFns[token.LTE] = p.parseInfixExpression
 	p.infixParseFns[token.EQ] = p.parseInfixExpression
 	p.infixParseFns[token.NEQ] = p.parseInfixExpression
+	p.infixParseFns[token.LPAREN] = p.parseCallExpression
 }
 
 func (p *Parser) parseExpression(precedence Precedence) ast.Expression {
@@ -234,6 +236,43 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 	}
 
 	exp.Body = p.parseBlockStatement()
+
+	return exp
+}
+
+func (p *Parser) parseExpressionList() []ast.Expression {
+	expressions := []ast.Expression{}
+
+	fmt.Println(p.currToken)
+	expressions = append(expressions, p.parseExpression(LOWEST))
+	fmt.Println(p.currToken)
+	for p.peekTokenIs(token.COMMA) {
+		p.nextToken()
+		p.nextToken()
+		expressions = append(expressions, p.parseExpression(LOWEST))
+	}
+
+	return expressions
+}
+
+func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {
+	exp := &ast.CallExpression{
+		Token:     p.currToken,
+		Function:  function,
+		Arguments: []ast.Expression{},
+	}
+
+	if p.peekTokenIs(token.RPAREN) {
+		p.nextToken()
+		return exp
+	}
+
+	p.nextToken()
+	exp.Arguments = p.parseExpressionList()
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
 
 	return exp
 }
