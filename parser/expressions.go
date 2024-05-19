@@ -59,6 +59,7 @@ func (p *Parser) setParseFunctions() {
 	p.prefixParseFns[token.MINUS] = p.parsePrefixExpression
 	p.prefixParseFns[token.LPAREN] = p.parseGroupedExpression
 	p.prefixParseFns[token.IF] = p.parseIfExpression
+	p.prefixParseFns[token.FUNCTION] = p.parseFunctionLiteral
 
 	p.infixParseFns[token.PLUS] = p.parseInfixExpression
 	p.infixParseFns[token.MINUS] = p.parseInfixExpression
@@ -170,14 +171,14 @@ func (p *Parser) parseGroupedExpression() ast.Expression {
 }
 
 func (p *Parser) parseIfExpression() ast.Expression {
-	ext := &ast.IfExpression{Token: p.currToken}
+	exp := &ast.IfExpression{Token: p.currToken}
 
 	if !p.expectPeek(token.LPAREN) {
 		return nil
 	}
 
-	ext.Condition = p.parseGroupedExpression()
-	if ext.Condition == nil {
+	exp.Condition = p.parseGroupedExpression()
+	if exp.Condition == nil {
 		return nil
 	}
 
@@ -185,7 +186,7 @@ func (p *Parser) parseIfExpression() ast.Expression {
 		return nil
 	}
 
-	ext.Consequence = p.parseBlockStatement()
+	exp.Consequence = p.parseBlockStatement()
 
 	if p.peekTokenIs(token.ELSE) {
 		p.nextToken()
@@ -194,8 +195,45 @@ func (p *Parser) parseIfExpression() ast.Expression {
 			return nil
 		}
 
-		ext.Alternative = p.parseBlockStatement()
+		exp.Alternative = p.parseBlockStatement()
 	}
 
-	return ext
+	return exp
+}
+
+func (p *Parser) parseFunctionLiteral() ast.Expression {
+	exp := &ast.FunctionLiteral{
+		Token:      p.currToken,
+		Parameters: []*ast.Identifier{},
+	}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	p.nextToken()
+	for p.currTokenIs(token.IDENTIFIER) {
+		exp.Parameters = append(
+			exp.Parameters,
+			p.parseIdentifier().(*ast.Identifier),
+		)
+
+		if p.peekTokenIs(token.COMMA) {
+			p.nextToken()
+		}
+		p.nextToken()
+	}
+
+	if !p.currTokenIs(token.RPAREN) {
+		p.peekError(token.RPAREN)
+		return nil
+	}
+
+	if !p.expectPeek(token.LBRACE) {
+		return nil
+	}
+
+	exp.Body = p.parseBlockStatement()
+
+	return exp
 }

@@ -2,6 +2,7 @@ package ast
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/vitorwdson/monkey-interpreter/token"
 )
@@ -79,6 +80,29 @@ func (i *IfExpression) String() string {
 	if i.Alternative != nil {
 		out += i.Alternative.String()
 	}
+
+	return out
+}
+
+type FunctionLiteral struct {
+	Token      token.Token
+	Parameters []*Identifier
+	Body       *BlockStatement
+}
+
+func (fn *FunctionLiteral) expressionNode()      {}
+func (fn *FunctionLiteral) TokenLiteral() string { return fn.Token.Literal }
+func (fn *FunctionLiteral) String() string {
+	params := []string{}
+	for _, param := range fn.Parameters {
+		params = append(params, param.String())
+	}
+
+	out := fmt.Sprintf(
+		"if (%s) %s",
+		strings.Join(params, ", "),
+		fn.Body.String(),
+	)
 
 	return out
 }
