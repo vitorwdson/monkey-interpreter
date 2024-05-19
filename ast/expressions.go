@@ -37,3 +37,16 @@ func (p *PrefixExpression) TokenLiteral() string { return p.Token.Literal }
 func (p *PrefixExpression) String() string {
 	return fmt.Sprintf("(%s%s)", p.Operator, p.Right.String())
 }
+
+type InfixExpression struct {
+	Token    token.Token
+	Operator string
+	Left     Expression
+	Right    Expression
+}
+
+func (i *InfixExpression) expressionNode()      {}
+func (i *InfixExpression) TokenLiteral() string { return i.Token.Literal }
+func (i *InfixExpression) String() string {
+	return fmt.Sprintf("(%s %s %s)", i.Left.String(), i.Operator, i.Right.String())
+}
