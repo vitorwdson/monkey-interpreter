@@ -6,22 +6,34 @@ import (
 	"github.com/vitorwdson/monkey-interpreter/token"
 )
 
+type (
+	prefixParseFn func() ast.Expression
+	infixParseFn  func(ast.Expression) ast.Expression
+)
+
 type Parser struct {
 	l      *lexer.Lexer
 	errors []ParserError
 
 	currToken token.Token
 	peekToken token.Token
+
+	prefixParseFns map[token.TokenType]prefixParseFn
+	infixParseFns  map[token.TokenType]infixParseFn
 }
 
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{
 		l:      l,
 		errors: []ParserError{},
+
+		prefixParseFns: make(map[token.TokenType]prefixParseFn),
+		infixParseFns:  make(map[token.TokenType]infixParseFn),
 	}
 
 	p.nextToken()
 	p.nextToken()
+	p.setParseFunctions()
 
 	return p
 }
