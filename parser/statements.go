@@ -32,9 +32,11 @@ func (p *Parser) parseLetStatement() ast.Statement {
 		return nil
 	}
 
-	// TODO: get the expression assigned to the variable
-	for p.currToken.Type != token.SEMICOLON {
-		p.nextToken()
+	p.nextToken()
+	statement.Value = p.parseExpression(LOWEST)
+
+	if !p.expectPeek(token.SEMICOLON) {
+		return nil
 	}
 
 	return statement
@@ -44,9 +46,10 @@ func (p *Parser) parseReturnStatement() ast.Statement {
 	statement := &ast.ReturnStatement{Token: p.currToken}
 	p.nextToken()
 
-	// TODO: get the expression assigned to the variable
-	for p.currToken.Type != token.SEMICOLON {
-		p.nextToken()
+	statement.Value = p.parseExpression(LOWEST)
+
+	if !p.expectPeek(token.SEMICOLON) {
+		return nil
 	}
 
 	return statement

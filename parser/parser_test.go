@@ -14,9 +14,9 @@ func TestLetStatements(t *testing.T) {
 		expectedIdentifier string
 		expectedValue      interface{}
 	}{
-		// {"let x = 5;", "x", 5},
-		// {"let y = true;", "y", true},
-		// {"let foobar = y;", "foobar", "y"},
+		{"let x = 5;", "x", 5},
+		{"let y = true;", "y", true},
+		{"let foobar = y;", "foobar", "y"},
 	}
 
 	for _, tt := range tests {
@@ -47,9 +47,9 @@ func TestReturnStatements(t *testing.T) {
 		input         string
 		expectedValue interface{}
 	}{
-		// {"return 5;", 5},
-		// {"return true;", true},
-		// {"return foobar;", "foobar"},
+		{"return 5;", 5},
+		{"return true;", true},
+		{"return foobar;", "foobar"},
 	}
 
 	for _, tt := range tests {
